@@ -8,16 +8,39 @@
  *
  * @author anmol
  */
+import FileHandler.FileRead;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
 
     /**
      * Creates new form Login
      */
-    String username;
     char[] pass=new char[30];
+    private String username;
+    private char[] password; 
+    private String userDetailsString;
+    File userDetails, currentUserIndex;
+    int currentUser;
+    
     public Login() {
         initComponents();
         setTitle("Shopping App");
+        try {
+            userDetails = new File("UserLoginDetails.txt");
+            currentUserIndex = new File("CurrentUserIndex.txt");
+            if(!currentUserIndex.exists())
+                currentUserIndex.createNewFile();
+        }
+        catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        getFileText();
     }
 
     /**
@@ -38,6 +61,7 @@ public class Login extends javax.swing.JFrame {
         Submit = new javax.swing.JButton();
         Register = new javax.swing.JButton();
         Reset = new javax.swing.JButton();
+        PasswordNMatch = new javax.swing.JOptionPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,12 +103,23 @@ public class Login extends javax.swing.JFrame {
 
         Register.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         Register.setText("Register");
+        Register.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegisterActionPerformed(evt);
+            }
+        });
 
         Reset.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         Reset.setText("Reset");
         Reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ResetActionPerformed(evt);
+            }
+        });
+
+        PasswordNMatch.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                PasswordNMatchPropertyChange(evt);
             }
         });
 
@@ -97,25 +132,28 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addGap(73, 73, 73)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Pword, javax.swing.GroupLayout.PREFERRED_SIZE, 740, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Uname, javax.swing.GroupLayout.PREFERRED_SIZE, 738, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Pword, javax.swing.GroupLayout.PREFERRED_SIZE, 740, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Uname, javax.swing.GroupLayout.PREFERRED_SIZE, 738, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(71, 71, 71)
-                                .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)
-                                .addComponent(Register, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(447, 447, 447)
-                        .addComponent(Submit, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(71, 71, 71)
+                        .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(Register, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 143, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(447, 447, 447)
+                .addComponent(Submit, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(PasswordNMatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(117, 117, 117))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,7 +162,9 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(67, 67, 67)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(183, 183, 183)
+                .addGap(53, 53, 53)
+                .addComponent(PasswordNMatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Uname, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -151,28 +191,131 @@ public class Login extends javax.swing.JFrame {
     private void PwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PwordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PwordActionPerformed
-    public void CheckPassword(String Username,String pass)
-    {
-        try{
-       BufferedReader utext=new BufferedReader(new FileReader("login.txt")); 
+    
+    
+     public void getFileText() {
+        try {
+            userDetailsString = "";
+            BufferedReader br = new BufferedReader(new FileReader(userDetails));
+            String line;
+            while((line = br.readLine()) != null) {
+                userDetailsString += line +"\n";
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        System.out.println("userDetailsString: " + userDetailsString);
+    }
+    public void writeUserInfo() {
+        System.out.println("WRITING USER INFO");
+        try {
+            StringBuffer sb = new StringBuffer(userDetailsString);
+            int start = sb.indexOf("$", sb.indexOf("$", currentUser) + 1);
+            int end = sb.indexOf("|", start);
+            System.out.println("start " + start + " end " + end);
+            String f = sb.substring(start, end);
+            System.out.println("USER DETAILS: ");
+            System.out.println(f);
+            PrintWriter pw = new PrintWriter(new FileWriter("UserDetails.txt"));
+            pw.println(f);
+            pw.close();
+        }
+        catch (Exception e) {
+            System.out.println("File error: " + e);
+        }
     }
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
         // TODO add your handling code here:
         username=Uname.getText();
         pass=Pword.getPassword();
+        System.out.println(pass);
+        PasswordNMatch.showMessageDialog(null,"Username or Password Invalid!!!");
+        PasswordNMatch.setVisible(true);
         String p = "";
         for(char c : pass)
             p += c;
-        System.out.println(p);
-        CheckPassword(username,p);
+       /* try {
+            if(!validateUser(username, p));
+                
+            else {
+                RegistrationForm Registration=new RegistrationForm();
+                Registration.setVisible(true);
+                this.setVisible(false);
+            }   
+        }
+        catch (Exception e) {
+            System.out.println("File error " + e);
+        }*/
+        
         
     }//GEN-LAST:event_SubmitActionPerformed
-
+ public boolean validateUser(String useText, String pasText) throws IOException { //Validates the username and password from registration file
+        
+        System.out.println("UseText: " + useText + " pasText: " + pasText);
+        String userText,passText;
+        System.out.println("userDetails: " + userDetailsString + ": userDetails");
+        boolean val = false;
+        StringBuffer sb = new StringBuffer(userDetailsString);
+        System.out.println("String Buffer " + sb);
+        int increment = 0;
+        increment = sb.indexOf("*");
+        System.out.println("increment before " + increment);
+        if(increment != -1) {
+            do {
+                int userStart = increment;
+                currentUser = userStart;
+                int userEnd = sb.indexOf("*",userStart + 1);
+                int passStart = sb.indexOf("$",userEnd + 1);
+                int passEnd = sb.indexOf("$",passStart + 1);
+                System.out.println("userStart: " + userStart + " userEnd " + userEnd + " passStart " + passStart + " passEnd " + passEnd);
+                userText = sb.substring(userStart + 1,userEnd);
+                passText = sb.substring(passStart + 1,passEnd);
+                System.out.println("UserText: " + userText + " PassText: " + passText);
+                if(useText.equals(userText)) {
+                    if(pasText.equals(passText)) {
+                        storeCurrentUserIndex();
+                        return true;
+                    }
+                    val = false;
+                }
+                else
+                    val = false;
+                increment = sb.indexOf("*",passEnd);
+            }while(increment != -1);
+            return false;
+        }
+        return false;
+    }
+    
+    public void storeCurrentUserIndex() { //Stores the current user data location in file to access user information
+        try {
+            PrintWriter pw = new PrintWriter(currentUserIndex);
+            pw.println(currentUser);
+            pw.close();
+        }
+        catch (Exception e) {
+            System.out.println("File error: " + e);
+        }
+        
+        
+    }
     private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
         // TODO add your handling code here:
         Uname.setText("");
         Pword.setText("");
     }//GEN-LAST:event_ResetActionPerformed
+
+    private void RegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        RegistrationForm Registration=new RegistrationForm();
+        Registration.setVisible(true);
+    }//GEN-LAST:event_RegisterActionPerformed
+
+    private void PasswordNMatchPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_PasswordNMatchPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PasswordNMatchPropertyChange
 
     /**
      * @param args the command line arguments
@@ -210,6 +353,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JOptionPane PasswordNMatch;
     private javax.swing.JPasswordField Pword;
     private javax.swing.JButton Register;
     private javax.swing.JButton Reset;
