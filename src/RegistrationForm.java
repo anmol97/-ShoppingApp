@@ -1,3 +1,6 @@
+
+import java.io.File;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,13 +11,28 @@
  *
  * @author anmol
  */
+import java.io.File;
+import java.io.*;
 public class RegistrationForm extends javax.swing.JFrame {
 
     /**
      * Creates new form RegistrationForm
-     */
+     */private String RUsername, RName, RPhone, RAddress;
+    private char[] RPassword, RPasswordR;
+    File userDetails;
     public RegistrationForm() {
         initComponents();
+        setTitle("Shopping App");
+        this.RPasswordNoMatch.setVisible(false);
+        this.RPhoneNotValid.setVisible(false);
+        try {
+            userDetails = new File("UserLoginDetails.txt");
+            if(!userDetails.exists())
+                userDetails.createNewFile();
+        }
+        catch (Exception e) {
+            System.out.println("File error: " + e);
+        }
     }
 
     /**
@@ -28,21 +46,23 @@ public class RegistrationForm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        RPhoneText = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        RNameText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        RAddressText = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        RUsernameText = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        RSubmit = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        RPasswordText = new javax.swing.JPasswordField();
+        RPasswordRText = new javax.swing.JPasswordField();
+        RPasswordNoMatch = new javax.swing.JLabel();
+        RPhoneNotValid = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,10 +74,10 @@ public class RegistrationForm extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Address :");
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        RPhoneText.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        RPhoneText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                RPhoneTextActionPerformed(evt);
             }
         });
 
@@ -65,10 +85,10 @@ public class RegistrationForm extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Name :");
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        RNameText.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        RNameText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                RNameTextActionPerformed(evt);
             }
         });
 
@@ -76,19 +96,19 @@ public class RegistrationForm extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Mobile :");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        RAddressText.setColumns(20);
+        RAddressText.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        RAddressText.setRows(5);
+        jScrollPane1.setViewportView(RAddressText);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Username :");
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        RUsernameText.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        RUsernameText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                RUsernameTextActionPerformed(evt);
             }
         });
 
@@ -100,11 +120,11 @@ public class RegistrationForm extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText("Confirm Password :");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jButton1.setText("SUBMIT");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        RSubmit.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        RSubmit.setText("SUBMIT");
+        RSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                RSubmitActionPerformed(evt);
             }
         });
 
@@ -119,6 +139,12 @@ public class RegistrationForm extends javax.swing.JFrame {
             }
         });
 
+        RPasswordNoMatch.setForeground(new java.awt.Color(255, 0, 0));
+        RPasswordNoMatch.setText("Password do not match!!!");
+
+        RPhoneNotValid.setForeground(new java.awt.Color(255, 0, 0));
+        RPhoneNotValid.setText("Mobile Number is not Valid!!!");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,18 +156,6 @@ public class RegistrationForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1)))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel7)
@@ -149,14 +163,28 @@ public class RegistrationForm extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jPasswordField1)
-                                    .addComponent(jPasswordField2, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE))))
+                                    .addComponent(RUsernameText)
+                                    .addComponent(RPasswordText)
+                                    .addComponent(RPasswordRText, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
+                                    .addComponent(RPasswordNoMatch, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(RNameText)
+                                    .addComponent(RPhoneText)
+                                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1)
+                                    .addComponent(RPhoneNotValid, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(308, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(RSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(230, 230, 230))
         );
         layout.setVerticalGroup(
@@ -167,24 +195,28 @@ public class RegistrationForm extends javax.swing.JFrame {
                 .addGap(63, 63, 63)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(RUsernameText, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                    .addComponent(jPasswordField1))
+                    .addComponent(RPasswordText))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPasswordField2)
+                    .addComponent(RPasswordRText)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(RPasswordNoMatch)
+                .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(RNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RPhoneText, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(2, 2, 2)
+                .addComponent(RPhoneNotValid)
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -192,30 +224,99 @@ public class RegistrationForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addComponent(RSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void RPhoneTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RPhoneTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_RPhoneTextActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void RNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RNameTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_RNameTextActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void RUsernameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RUsernameTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_RUsernameTextActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void RSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RSubmitActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+       String RPass = ""; // Used to store password in a String
+        RUsername = RUsernameText.getText();
+        RPassword = RPasswordText.getPassword();
+        RPasswordR = RPasswordRText.getPassword();
+        RPhone = RPhoneText.getText();
+        if(!ValidatePassword(RPassword,RPasswordR)) {
+            System.out.println("password no match");
+            this.RPasswordNoMatch.setVisible(true);
+        }
+        else if(!ValidatePhone(RPhone)) {
+            this.RPhoneNotValid.setVisible(true);
+        }
+        else if(ValidatePassword(RPassword, RPasswordR) && (ValidatePhone(RPhone))){
+            this.RPasswordNoMatch.setVisible(false);
+            for(char c : RPassword) {
+                RPass += c;
+            }
+            RName = RNameText.getText();
+            RAddress = RAddressText.getText();
+            System.out.println("Before writing to file");
+            try { //Writing user info to file
+                FileWriter fw = new FileWriter(userDetails, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(fw);
+                pw.println("|");
+                System.out.println("Writing");
+                pw.println("*" + RUsername + "*");
+                pw.println("$" + RPass + "$");
+                pw.println(RName);
+                pw.println(RPhone);
+                pw.println(RAddress + "|");
+                pw.close();
+            }
+            catch(Exception e) {
+                System.out.println("File error: " + e);
+            }
+            System.out.println("After writing to file");
+            
+            Login log = new Login();
+            log.setVisible(true);
+            this.setVisible(false);
+        }
+        
+    }//GEN-LAST:event_RResetButtonActionPerformed
 
+    private void RSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RSubmitButtonActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_RSubmitActionPerformed
+    
+    private boolean ValidatePassword(char[] Password, char[] PasswordR) { //To check if password is valid
+        if(Password.length != PasswordR.length)
+            return false;
+        else
+            for(int i = 0; i < Password.length; i++) {
+                if(Password[i] != PasswordR[i])
+                    return false;
+            }
+        return true;
+    }
+    
+    private boolean ValidatePhone(String phone) { //To check if phone number is valid
+        if(phone.length() != 10)
+            return false;
+        StringBuffer sb = new StringBuffer(phone);
+        for(int i = 0; i < sb.length(); i++) {
+            if(!Character.isDigit(sb.charAt(i)))
+                return false;
+        }
+        return true;
+    }
     private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField6ActionPerformed
@@ -256,7 +357,15 @@ public class RegistrationForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextArea RAddressText;
+    private javax.swing.JTextField RNameText;
+    private javax.swing.JLabel RPasswordNoMatch;
+    private javax.swing.JPasswordField RPasswordRText;
+    private javax.swing.JPasswordField RPasswordText;
+    private javax.swing.JLabel RPhoneNotValid;
+    private javax.swing.JTextField RPhoneText;
+    private javax.swing.JButton RSubmit;
+    private javax.swing.JTextField RUsernameText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -265,13 +374,7 @@ public class RegistrationForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }

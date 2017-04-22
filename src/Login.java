@@ -31,6 +31,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setTitle("Shopping App");
+        PasswordNMatch.setVisible(false);
         try {
             userDetails = new File("UserLoginDetails.txt");
             currentUserIndex = new File("CurrentUserIndex.txt");
@@ -61,7 +62,7 @@ public class Login extends javax.swing.JFrame {
         Submit = new javax.swing.JButton();
         Register = new javax.swing.JButton();
         Reset = new javax.swing.JButton();
-        PasswordNMatch = new javax.swing.JOptionPane();
+        PasswordNMatch = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,11 +118,10 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        PasswordNMatch.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                PasswordNMatchPropertyChange(evt);
-            }
-        });
+        PasswordNMatch.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        PasswordNMatch.setForeground(new java.awt.Color(255, 0, 0));
+        PasswordNMatch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PasswordNMatch.setText("Username or password Invalid!!!");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,13 +147,14 @@ public class Login extends javax.swing.JFrame {
                         .addComponent(Register, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 143, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(447, 447, 447)
-                .addComponent(Submit, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(447, 447, 447)
+                        .addComponent(Submit, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(411, 411, 411)
+                        .addComponent(PasswordNMatch, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(PasswordNMatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(117, 117, 117))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,23 +163,23 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(67, 67, 67)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53)
-                .addComponent(PasswordNMatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addGap(108, 108, 108)
+                .addComponent(PasswordNMatch, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Uname, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Pword, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(Submit, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Register, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
 
         pack();
@@ -230,14 +231,14 @@ public class Login extends javax.swing.JFrame {
         username=Uname.getText();
         pass=Pword.getPassword();
         System.out.println(pass);
-        PasswordNMatch.showMessageDialog(null,"Username or Password Invalid!!!");
-        PasswordNMatch.setVisible(true);
         String p = "";
         for(char c : pass)
             p += c;
-       /* try {
+        
+        
+      /*try {
             if(!validateUser(username, p));
-                
+            
             else {
                 RegistrationForm Registration=new RegistrationForm();
                 Registration.setVisible(true);
@@ -313,10 +314,6 @@ public class Login extends javax.swing.JFrame {
         Registration.setVisible(true);
     }//GEN-LAST:event_RegisterActionPerformed
 
-    private void PasswordNMatchPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_PasswordNMatchPropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_PasswordNMatchPropertyChange
-
     /**
      * @param args the command line arguments
      */
@@ -353,7 +350,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JOptionPane PasswordNMatch;
+    private javax.swing.JLabel PasswordNMatch;
     private javax.swing.JPasswordField Pword;
     private javax.swing.JButton Register;
     private javax.swing.JButton Reset;
