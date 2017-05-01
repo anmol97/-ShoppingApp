@@ -258,8 +258,8 @@ public class Login extends javax.swing.JFrame {
             
             else {
                 PasswordNMatch.setVisible(false);
-                RegistrationForm Registration=new RegistrationForm();
-                Registration.setVisible(true);
+                ShopCart shopcart=new ShopCart();
+                shopcart.setVisible(true);
                 this.setVisible(false);
             }   
         }
